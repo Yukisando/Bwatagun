@@ -3,24 +3,14 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Zombie : NetworkBehaviour {
-    public float speed = 10f;
-    private Transform target;
+    private Player currentTarget;
     private NavMeshAgent ai;
-
-    private Transform currentTarget;
 
     private void Awake() {
         ai = GetComponent<NavMeshAgent>();
     }
 
     public override void OnNetworkSpawn() {
-        var player = FindObjectOfType<PlayerMovement>();
-        if (!player) {
-            return;
-        }
-
-        target = player.transform;
-
         if (!IsServer) {
             Destroy(GetComponent<NavMeshAgent>());
             Destroy(GetComponent<Rigidbody>());
@@ -29,9 +19,15 @@ public class Zombie : NetworkBehaviour {
     }
 
     private void Update() {
-        if (target && target != currentTarget) {
-            ai.speed = speed;
-            ai.SetDestination(target.position);
+        if (IsServer) {
+            FindPlayer();
+        }
+    }
+
+    private void FindPlayer() {
+        currentTarget = FindObjectOfType<Player>();
+        if (currentTarget) {
+            ai.SetDestination(currentTarget.transform.position);
         }
     }
 

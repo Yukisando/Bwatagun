@@ -18,7 +18,7 @@ public class PlayerShoot : NetworkBehaviour {
 
         if (Input.GetMouseButtonDown(0)) {
             Physics.Raycast(playerCam.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0)), out var hit);
-            if (hit.collider.TryGetComponent(out Zombie z)) {
+            if (hit.collider && hit.collider.TryGetComponent(out Zombie z)) {
                 ShotZombieServerRPC(z.GetComponent<NetworkObject>().NetworkObjectId);
             }
         }

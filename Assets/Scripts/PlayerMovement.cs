@@ -1,7 +1,6 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerMovement : NetworkBehaviour {
+public class PlayerMovement : Player {
     public float movementSpeed = 5f;
     public float mouseSpeed = 2f;
     public float sprintMultiplier = 2f;
